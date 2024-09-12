@@ -408,7 +408,7 @@ average_species_flipper_length <- penguins_data_from_csv %>%
 ```{r}
 ggplot(data = average_species_flipper_length, aes(x = species, y = average_flipper_length, fill = species)) +
   geom_bar(stat = "identity") +
-  theme_bw() +
+  theme_minimal() +
   scale_fill_viridis_d() +
   coord_flip() +
   theme(legend.position = "none") +
@@ -426,13 +426,13 @@ Let's say the only way to get the penguins data was via the uri. At the top of t
 -   We can use the function full_join()
 
 ```{r}
-# gentoo_adelie_penguins_data_joined <- full_join(gentoo_penguins_data_from_url, adelie_penguins_data_from_url)
+gentoo_adelie_penguins_data_joined <- full_join(gentoo_penguins_data_from_uri, adelie_penguins_data_from_url)
 ```
 
 #### Final Exercises {style="color: #B8860B;"}
 
 1.  Create a boxplot of body mass by species & make the plot interactive
-    1.  Hint: geom_boxplot(), ggplotly()
+    -   Hint: geom_boxplot(), ggplotly()
 2.  How many penguins live on Torgersen Island?
 3.  Create a dataframe that has the average culmen depth for each species
-    1.  Make a bar plot of the new dataframe with species on the x axis and average culmen depth on the y axis
+    -   Make a bar plot of the new dataframe with species on the x axis and average culmen depth on the y axis
