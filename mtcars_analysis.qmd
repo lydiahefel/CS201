@@ -9,6 +9,7 @@ editor: visual
 ```{r}
 library(tidyverse)
 library(plotly)
+library(ggpubr)
 ```
 
 ### Read in Dataset
@@ -41,7 +42,27 @@ mtcars <- mtcars %>%
 
 ```{r}
 mtcars_wt_mpg <- ggplot(data = mtcars, aes(x = mpg, y = wt, label = model, color = hp)) +
-  geom_point()
+  geom_point() +
+  geom_smooth() +
+  stat_cor()
 
-ggplotly(mtcars_wt_mpg)
+mtcars_wt_mpg
+```
+
+```{r}
+mtcars_split <- mtcars %>%
+  separate(model, into = c("make", "model"), sep = " ", extra = "merge", fill = "right")
+```
+
+### Challenge
+
+What is the average mpg for each car manufactures? Please plot the results.
+
+```{r}
+average_mtcars_make_mpg <- mtcars_split %>% 
+  group_by(make) %>% 
+  summarise(average_mpg = mean(mpg, na.rm = TRUE))
+
+ggplot(average_mtcars_make_mpg, aes(y = reorder(make, average_mpg), x = average_mpg)) +
+  geom_bar(stat = "identity")
 ```
