@@ -9,7 +9,7 @@ editor: visual
 
 ### Libraries
 
-```{r}
+```{r, message = FALSE}
 library(here)
 library(tidyverse)
 library(janitor)
@@ -17,14 +17,14 @@ library(janitor)
 
 ### Data
 
-```{r}
+```{r, message = FALSE}
 pokemon <- read_csv(here("data/pokemon.csv"))
 
 pokemon <- pokemon %>% 
   clean_names()
 ```
 
-### Describe the data: Pokemon 
+### Describe the data: Pokemon
 
 Data author: Alberto Barradas
 
@@ -36,8 +36,8 @@ How many variables (columns) are there? 13
 
 ### skimr: Quick overview
 
-```{r}
-skimdata <- skimr::skim(pokemon)
+```{r, message = FALSE}
+skim_pokemon <- skimr::skim(pokemon)
 ```
 
 ### Summary: Quick overview
@@ -65,52 +65,59 @@ pokemon$type_2 <- as.factor(pokemon$type_2)
 
 How many categorical variables are there? 5 (maybe 6?)
 
-How many continuous variables are there? 7
+How many numeric variables are there? 7
 
-What are some variables of interest to you?
+What are some variables of interest to you? how many legendary?
 
 ------------------------------------------------------------------------
 
 ## EDA Assignment Prep: \[Insert Data Name Here\]
 
-### Libraries
-
-```{r}
-library(here)
-library(tidyverse)
-library(janitor)
-```
-
 ### Data
 
-```{r}
+```{r, message = FALSE}
+olympics <- read_csv(here("data/athlete_events.csv"))
 
+olympics <- olympics %>% 
+  clean_names()
 ```
 
 ### Describe the data:
 
-Data author:
+Data author: R. Griffin
 
-Description:
+Description: An extensive culmination of data from the Olympic Games over 120 years.
 
-How many observations (rows) are there?
+How many observations (rows) are there? 271,116
 
-How many variables (columns) are there?
+How many variables (columns) are there? 15
 
 ### Summary: Quick overview
 
 ```{r}
-
+summary(olympics)
 ```
 
-### Categorical vs. Continuous
+### Categorical vs. Numeric
 
 ```{r}
+olympics$id <- as.factor(olympics$id)
+olympics$year <- as.factor(olympics$year)
 
+class(olympics$id)
+class(olympics$year)
+
+skim_olympics <- skimr::skim(olympics)
 ```
 
-How many categorical variables are there?
+How many categorical variables are there? 12
 
-How many continuous variables are there?
+How many numeric variables are there? 3
 
-What are some variables of interest to you?
+What are some variables of interest to you? age, height, and weight
+
+What kinds of questions could you explore with this data?
+
+-   What height/weight/age are the most common among different medal winners?
+
+-   How does an athlete compare to themselves in previous Olympics - in terms of medal placement?
