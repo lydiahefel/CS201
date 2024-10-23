@@ -153,4 +153,4 @@ ggplot(pokemon, aes(y = sp_def)) +
 ### Question for next class:
 
 -   How do you read a boxplot, and what are the different landmarks?
-    -   The thick line in the middle is median (Q2), the data is split into two halves. Each of the two boxes is 25% of the data, The outer lines of the two boxes are Q1 (the lower end) and Q3 (the higher end). The whiskers are the lower 25% of the data and higher 25% of the data, the dots outside of the boxplot are the outliers in the data.
+    -   The thick line in the middle is median (quartile two), the data is split into two halves. Each of the two boxes is 25% of the data, together they are known as the inter-quartile range. The outer lines of the two boxes are quartile one and quartile three. The whiskers are the lower 25% of the data and higher 25% of the data, the range from the minimum to maximum, excluding the outliers. The dots outside of the boxplot are the outliers in the data.
