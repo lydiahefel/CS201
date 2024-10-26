@@ -207,12 +207,12 @@ ggplot(olympic_data, aes(x = noc, fill = sex)) +
 ```
 
 ```{r}
-medal_data <- olympic_data %>% 
+medal_plot <- olympic_data %>% 
   dplyr::filter(!is.na(medal)) %>% 
-  ggplot(medal_data, aes(x = medal, fill = sex)) +
+  ggplot(aes(x = medal, fill = sex)) +
   geom_bar()
 
-#medal_data is not found
+ggplotly(medal_plot)
 ```
 
 #### 
