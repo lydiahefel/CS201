@@ -248,10 +248,12 @@ ggplot(percent_completed_by_state_map) +
 ```{r}
 percent_completed_no_use_by_state <- teds_d_select %>%
   group_by(stfips) %>%
-  summarize(completed_no_use_cases = sum(reason == "completed" & freq1_d == "no use", 
-                                         na.rm = TRUE),
-            total_cases = n()) %>%
-  mutate(percentage_completed_no_use = (completed_no_use_cases / total_cases) * 100)
+  summarize(completed_cases = sum(reason == "completed", na.rm = TRUE),
+            completed_no_use_cases = sum(reason == "completed" & freq1_d == "no use", 
+                                         na.rm = TRUE),) %>%
+  mutate(
+    percentage_completed_no_use = ifelse(
+      completed_cases > 0, (completed_no_use_cases / completed_cases) * 100, 0))
 ```
 
 ```{r}
@@ -285,17 +287,15 @@ percent_completed_no_use_interactive <- ggplot(percent_completed_no_use_by_state
 
 percent_completed_no_use_interactive
 
-#girafe(ggobj = percent_completed_no_use_interactive)
+girafe(ggobj = percent_completed_no_use_interactive)
 ```
 
 2.  How does the percentage of treatments being completed & percentage of treatments ending with no use vary by the service and length of stay. Create at least 3 visualizations to try and answer this question.
 
 ```{r, warning = FALSE}
 completed_no_use_service_los_data <- teds_d_select %>%
-  group_by(stfips) %>%
-  summarize(los = los,
-            service = services_d,
-            total_cases = n(),
+  group_by(services_d) %>%
+  summarize(total_cases = n(),
             completed_cases = sum(reason == "completed", na.rm = TRUE),
             no_use_cases = sum(freq1_d == "no use", na.rm = TRUE),
             completed_no_use_cases = sum(reason == "completed" & freq1_d == "no use", 
@@ -306,5 +306,6 @@ completed_no_use_service_los_data <- teds_d_select %>%
 ```
 
 ```{r}
-completed_no_use_service_los_data$stfips_recode <- sprintf('%02d', completed_no_use_service_los_data$stfips)
+ggplot(completed_no_use_service_los_data, aes(color = services_d, x = percentage_no_use, y = percentage_completed)) +
+  geom_point()
 ```
