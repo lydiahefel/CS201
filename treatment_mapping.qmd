@@ -293,7 +293,7 @@ girafe(ggobj = percent_completed_no_use_interactive)
 2.  How does the percentage of treatments being completed & percentage of treatments ending with no use vary by the service and length of stay. Create at least 3 visualizations to try and answer this question.
 
 ```{r, warning = FALSE}
-completed_no_use_service_los_data <- teds_d_select %>%
+completed_no_use_service_data <- teds_d_select %>%
   group_by(services_d) %>%
   summarize(total_cases = n(),
             completed_cases = sum(reason == "completed", na.rm = TRUE),
@@ -306,6 +306,61 @@ completed_no_use_service_los_data <- teds_d_select %>%
 ```
 
 ```{r}
-ggplot(completed_no_use_service_los_data, aes(color = services_d, x = percentage_no_use, y = percentage_completed)) +
+ggplot(completed_no_use_service_data, aes(color = services_d, x = percentage_no_use, y = percentage_completed)) +
   geom_point()
 ```
+
+```{r}
+ggplot(completed_no_use_service_data, aes(x = services_d, y = completed_no_use_cases, fill = percentage_completed_no_use)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+completed_no_use_los_data <- teds_d_select %>%
+  group_by(los) %>%
+  summarize(total_cases = n(),
+            completed_cases = sum(reason == "completed", na.rm = TRUE),
+            no_use_cases = sum(freq1_d == "no use", na.rm = TRUE),
+            completed_no_use_cases = sum(reason == "completed" & freq1_d == "no use", 
+                                         na.rm = TRUE)) %>%
+  mutate(percentage_completed_no_use = (completed_no_use_cases / total_cases) * 100) %>% 
+  mutate(percentage_completed = (completed_cases / total_cases) * 100) %>% 
+  mutate(percentage_no_use = (no_use_cases / total_cases) * 100)
+```
+
+```{r}
+ggplot(completed_no_use_los_data, aes(color = los, x = percentage_no_use, y = percentage_completed)) +
+  geom_point()
+```
+
+```{r, warning = FALSE}
+ggplot(completed_no_use_los_data, aes(x = los, y = completed_no_use_cases, fill = percentage_completed_no_use)) +
+  geom_col()
+```
+
+```{r, message = FALSE}
+completed_no_use_los_services_data <- teds_d_select %>%
+  group_by(los, services_d) %>%
+  summarize(total_cases = n(),
+            completed_cases = sum(reason == "completed", na.rm = TRUE),
+            no_use_cases = sum(freq1_d == "no use", na.rm = TRUE),
+            completed_no_use_cases = sum(reason == "completed" & freq1_d == "no use", 
+                                         na.rm = TRUE)) %>%
+  mutate(percentage_completed_no_use = (completed_no_use_cases / total_cases) * 100) %>% 
+  mutate(percentage_completed = (completed_cases / total_cases) * 100) %>% 
+  mutate(percentage_no_use = (no_use_cases / total_cases) * 100)
+```
+
+```{r, warning = FALSE}
+ggplot(completed_no_use_los_services_data, aes(x = los, y = percentage_no_use, color = services_d)) +
+  geom_point()
+
+ggplot(completed_no_use_los_services_data, aes(x = los, y = percentage_completed, color = services_d)) +
+  geom_point()
+
+ggplot(completed_no_use_los_services_data, aes(x = los, y = percentage_completed_no_use, color = services_d)) +
+  geom_point()
+```
+
+-   The visuals above walk through better understanding of what this question is asking, and how it can be answered. The last three visuals show the displayed percentages of no use at discharge, completed treatment, and no use at discharge after completed treatment. Each are distributed over the length of stay and colored by the type of treatment service.
